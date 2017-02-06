@@ -8,19 +8,22 @@ public class Percolation {
 	private boolean isOpen[];
 	private int n = 0;
 	private int openSiteCount = 0;
+	private boolean isP = false;
 	// create n-by-n grid, with all sites blocked
 	public Percolation(int n){ 
+		if (n <= 0) {
+			throw new java.lang.IllegalArgumentException();
+		}
 		wuf = new WeightedQuickUnionUF(n * n + 2);
 		isOpen = new boolean[n * n + 2];
 		this.n = n;
-		for (int i = 0; i < n; i++) {
-			wuf.union(n * n, i);
-			wuf.union(n * n + 1, (n - 1) * n + i);
-		}
 	}
 	
 	// open site (row, col) if it is not open already
 	public void open(int row, int col) {
+		if (row < 1 || row > n || col < 1 || col > n) {
+			throw new java.lang.IndexOutOfBoundsException();
+		}
 		row -= 1;
 		col -= 1;
 		int ori = row * n + col;
@@ -28,29 +31,35 @@ public class Percolation {
 			return;
 		}
 		isOpen[ori] = true;
+		if (row == 0) {
+			//System.out.println("ori = "+ ori + " , first= "+ n * n +" connected");
+			wuf.union(ori, n * n);
+		}
 		openSiteCount++;
-		int left = row * n + col - 1;
-		int right = row * n + col + 1;
-		int up = (row - 1) * n + col;
-		int down = (row + 1) * n + col;
 		
-		openSite(ori, left);
-		openSite(ori, right);
-		openSite(ori, up);
-		openSite(ori, down);
+		openSite(ori, row, col - 1);
+		openSite(ori, row, col + 1);
+		openSite(ori, row - 1, col);
+		openSite(ori, row + 1, col);
 	}
 	
-	private void openSite(int ori, int index) {
-		if (index < 0 || index > n * n - 1) {
+	//Zero based index;
+	private void openSite(int ori, int row, int col) {
+		if (row < 0 || row > n - 1 || col < 0 || col > n - 1) {
 			return;
 		}
+		int index = row * n + col;
 		if (isOpen[index]) {
+			//System.out.println("ori = "+ ori + " , index= "+ index +" connected");
 			wuf.union(ori, index);
 		}
 	}
 	
 	// is site (row, col) open?
 	public boolean isOpen(int row, int col) {
+		if (row < 1 || row > n || col < 1 || col > n) {
+			throw new java.lang.IndexOutOfBoundsException();
+		}
 		row -= 1;
 		col -= 1;
 		return isOpen[row * n + col];
@@ -58,10 +67,14 @@ public class Percolation {
 	
 	// is site (row, col) full?
 	public boolean isFull(int row, int col){ 
+		if (row < 1 || row > n || col < 1 || col > n) {
+			throw new java.lang.IndexOutOfBoundsException();
+		}
+		boolean isOpen = isOpen(row, col);
 		row -= 1;
 		col -= 1;
 		int index = row * n + col;
-		return wuf.connected(index, n * n);
+		return isOpen && wuf.connected(index, n * n);
 	}
 	
 	// number of open sites
@@ -71,18 +84,27 @@ public class Percolation {
 	
 	// does the system percolate?
 	public boolean percolates() {
-		return wuf.connected(n * n, n * n + 1);
+		if (isP) {
+			return isP;
+		}
+		for (int i = 0; i < n; i++) {
+			if (wuf.connected(n * n, (n - 1) * n + i)) {
+				isP = true;
+			}
+		}
+		return openSiteCount > 0 && isP;
 	}
 	
 	// test client (optional)
 	public static void main(String[] args) {
 		Percolation p = new Percolation(3);
-		testOpen(p, 1, 1);
-		testOpen(p, 1, 2);
-		testOpen(p, 2, 1);
+		testOpen(p, 1, 3);
 		testOpen(p, 2, 3);
 		testOpen(p, 3, 3);
-		testOpen(p, 3, 2);
+		testOpen(p, 3, 1);
+		testOpen(p, 2, 1);
+		testOpen(p, 1, 1);
+
 		//testOpen(p, 1, 1);
 	}
 	

@@ -11,6 +11,9 @@ public class PercolationStats {
 	private double confidenceHi = 0;
 	private double meanArr[];
 	public PercolationStats(int n, int trials) {
+		if (n <= 0 || trials <= 0) {
+			throw new java.lang.IllegalArgumentException();
+		}
 		meanArr = new double[trials];
 		for (int i = 0; i < trials; i++) {
 			p = new Percolation(n);
@@ -25,7 +28,7 @@ public class PercolationStats {
 				int col = position[index] % n;
 				index++;
 				//System.out.println(row + ", " + col);
-				p.open(row, col);
+				p.open(row + 1, col + 1);
 			}
 			double ratio = (double)(p.numberOfOpenSites()) / (double)(n * n);
 			//System.out.println("i = " + i + ", ratio="+ratio);
