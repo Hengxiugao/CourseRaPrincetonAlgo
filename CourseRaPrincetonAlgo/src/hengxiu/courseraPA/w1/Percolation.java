@@ -21,6 +21,8 @@ public class Percolation {
 	
 	// open site (row, col) if it is not open already
 	public void open(int row, int col) {
+		row -= 1;
+		col -= 1;
 		int ori = row * n + col;
 		if (isOpen[ori]) {
 			return;
@@ -49,11 +51,15 @@ public class Percolation {
 	
 	// is site (row, col) open?
 	public boolean isOpen(int row, int col) {
+		row -= 1;
+		col -= 1;
 		return isOpen[row * n + col];
 	}
 	
 	// is site (row, col) full?
 	public boolean isFull(int row, int col){ 
+		row -= 1;
+		col -= 1;
 		int index = row * n + col;
 		return wuf.connected(index, n * n);
 	}
@@ -71,12 +77,12 @@ public class Percolation {
 	// test client (optional)
 	public static void main(String[] args) {
 		Percolation p = new Percolation(3);
-		testOpen(p, 0, 0);
-		testOpen(p, 0, 1);
-		testOpen(p, 1, 0);
+		testOpen(p, 1, 1);
 		testOpen(p, 1, 2);
-		testOpen(p, 2, 2);
 		testOpen(p, 2, 1);
+		testOpen(p, 2, 3);
+		testOpen(p, 3, 3);
+		testOpen(p, 3, 2);
 		//testOpen(p, 1, 1);
 	}
 	
