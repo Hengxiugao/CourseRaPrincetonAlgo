@@ -4,10 +4,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 	
-	WeightedQuickUnionUF wuf;
-	boolean isOpen[];
-	int n = 0;
-	int openSiteCount = 0;
+	private WeightedQuickUnionUF wuf;
+	private boolean isOpen[];
+	private int n = 0;
+	private int openSiteCount = 0;
 	// create n-by-n grid, with all sites blocked
 	public Percolation(int n){ 
 		wuf = new WeightedQuickUnionUF(n * n + 2);
@@ -80,7 +80,7 @@ public class Percolation {
 		//testOpen(p, 1, 1);
 	}
 	
-	public static void testOpen(Percolation p, int row, int col){
+	private static void testOpen(Percolation p, int row, int col){
 		System.out.println("open " + row + ", " + col);
 		p.open(row, col);
 		System.out.println("isOpen = "+p.isOpen(row, col));
