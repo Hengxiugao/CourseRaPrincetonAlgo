@@ -1,52 +1,62 @@
 package hengxiu.courseraPA.w2;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Iterator;
+
 import edu.princeton.cs.algs4.StdRandom;
 
 public class Permutation {
 	
-	private static Deque<String> deque;
+	private static RandomizedQueue<String> rQ;
 	
 	public static void main(String[] args) {
-		deque = new Deque<String>();
-		int k = Integer.valueOf(args[0]);
+		rQ = new RandomizedQueue<String>();
+		int k = Integer.parseInt(args[0]);
 		String fileName = args[2];
 		String content = readLineFromFile(fileName);
 		readDeque(content);
-		if (k > deque.size()) {
-			k = deque.size();
+		if (k > rQ.size()) {
+			k = rQ.size();
 		}
+		Iterator<String> iterator = rQ.iterator();
 		for (int i = 0; i < k; i++) {
-			System.out.println(popRandom());
+			System.out.println(iterator.next());
 		}
 		
-	}
-	private static String popRandom() {
-		if (deque.size() == 1) {
-			return deque.removeFirst();
-		}
-		int index = StdRandom.uniform(deque.size());
-		for (int i = 0; i < index; i++) {
-			deque.addLast(deque.removeFirst());
-		}
-		return deque.removeFirst();
-	}
-	private static void print() {
-		for (String str : deque) {
-			System.out.print(str + " ");
-		}
 	}
 	
 	private static void readDeque(String content) {
 		StringBuffer sb = new StringBuffer(content);
 		while (sb.indexOf(" ") > 0) {
-			deque.addLast(sb.substring(0, sb.indexOf(" ")));
+			rQ.enqueue(sb.substring(0, sb.indexOf(" ")));
 			sb.delete(0, sb.indexOf(" ") + 1);
 		}
-		deque.addLast(sb.toString());
+		rQ.enqueue(sb.toString());
 	}
 	
 	private static String readLineFromFile(String fileName) {
-		return "A B C D E F G H I";
+		BufferedReader br = null;
+		String line = "";
+		try {
+			br = new BufferedReader(new FileReader(fileName));
+		    
+		    line = br.readLine();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+		    try {
+		    	if (br != null) {
+		    		br.close();
+		    	}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return line;
 	}
 
 }
