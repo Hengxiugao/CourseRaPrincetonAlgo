@@ -15,9 +15,9 @@ public class Deque<Item> implements Iterable<Item> {
 		}
 	}
 	
-	Node head;
-	Node tail;
-	int size = 0;
+	private Node head;
+	private Node tail;
+	private int size = 0;
 	
 	// construct an empty deque
 	public Deque() {
