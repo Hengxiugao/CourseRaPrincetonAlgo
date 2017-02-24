@@ -98,6 +98,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 		@Override
 		public Item next() {
+			if (!hasNext()) {
+				throw new java.util.NoSuchElementException();
+			}
 			int randomIndex = StdRandom.uniform(s);
 			Item result = null;
 			if (randomIndex < s - 1) {
