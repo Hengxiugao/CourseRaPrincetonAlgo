@@ -5,8 +5,8 @@ import java.util.List;
 
 public class FastCollinearPoints {
 	
-	List<Point> pointList;
-	List<LineSegment> segList;
+	private List<Point> pointList;
+	private List<LineSegment> segList;
 	
 	
 	// finds all line segments containing 4 or more points
@@ -29,7 +29,7 @@ public class FastCollinearPoints {
 	
 	// the number of line segments
 	public int numberOfSegments() {
-		return 0;
+		return segList.size();
 	}
 	
 	// the line segments
