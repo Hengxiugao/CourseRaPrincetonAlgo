@@ -3,13 +3,10 @@ package hengxiu.courseraPA.w3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 public class FastCollinearPoints {
-	
-	private Point[] pointArr;
 	private List<LineSegment> segList;
 	
 	// finds all line segments containing 4 or more points
@@ -17,7 +14,8 @@ public class FastCollinearPoints {
 		if (points == null) {
 			throw new java.lang.NullPointerException();
 		}
-		pointArr = points;
+		int n = points.length;
+		Point[] pointArr = Arrays.copyOf(points, n);
 		Arrays.sort(pointArr);
 		segList = new ArrayList<>();
 		for (int i = 0; i < pointArr.length; i++) {
@@ -27,7 +25,7 @@ public class FastCollinearPoints {
 			}
 		}
 		
-		int n = points.length;
+		
 		ArrayList<Point> tempList = new ArrayList<>();
 		HashSet<Double> slopeSet = new HashSet<>();
 		for (int i = 0; i < n - 3; i++) {
