@@ -18,8 +18,10 @@ public class FastCollinearPoints {
 		Point[] pointArr = Arrays.copyOf(points, n);
 		Arrays.sort(pointArr);
 		segList = new ArrayList<>();
+		//System.out.println("Sorted");
 		for (int i = 0; i < pointArr.length; i++) {
 			Point p = pointArr[i];
+			//System.out.println(p);
 			if (p == null) {
 				throw new java.lang.NullPointerException();
 			}
@@ -28,6 +30,19 @@ public class FastCollinearPoints {
 		
 		ArrayList<Point> tempList = new ArrayList<>();
 		HashSet<Double> slopeSet = new HashSet<>();
+		//Check for duplicate
+		for (int i = 0; i < n; i++) {
+			Point[] pointCopyArr = Arrays.copyOf(pointArr, n);
+			Point pivot = pointCopyArr[i];
+			Arrays.sort(pointCopyArr, 0, i , pivot.slopeOrder());
+			Arrays.sort(pointCopyArr, i + 1, n, pivot.slopeOrder());
+			for (int j = i + 1; j < n ; j++) {
+				if (pivot.slopeTo(pointCopyArr[j]) == Double.NEGATIVE_INFINITY) {
+					throw new java.lang.IllegalArgumentException();
+				}
+			}
+		}
+		
 		for (int i = 0; i < n - 3; i++) {
 			Point[] pointCopyArr = Arrays.copyOf(pointArr, n);
 			Point pivot = pointCopyArr[i];
@@ -56,11 +71,12 @@ public class FastCollinearPoints {
 				Point curent = pointCopyArr[j];
 				Point pre = pointCopyArr[j - 1];
 				//System.out.println("j="+ j + " : pivot slope to current = " + pivot.slopeTo(curent) + ", pivot slope to pre = " + pivot.slopeTo(pre));
-				if (slopeSet.contains(pivot.slopeTo(curent))) {
+				if (slopeSet.contains(pivot.slopeTo(pre))) {
 					//System.out.println("--set contains--");
 					start = j;
 					continue;
 				}
+				
 				if (Double.compare(pivot.slopeTo(curent), pivot.slopeTo(pre)) != 0) {
 					//System.out.println("not equals, j-start=" + (j - start));
 					if (j - start >= 3) {
