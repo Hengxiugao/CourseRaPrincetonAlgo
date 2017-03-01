@@ -68,16 +68,16 @@ public class FastCollinearPoints {
 			*/
 			
 			for (int j = i + 2; j < n; j++) {
-				Point curent = pointCopyArr[j];
-				Point pre = pointCopyArr[j - 1];
+				Point curentPoint = pointCopyArr[j];
+				Point startPoint = pointCopyArr[start];
 				//System.out.println("j="+ j + " : pivot slope to current = " + pivot.slopeTo(curent) + ", pivot slope to pre = " + pivot.slopeTo(pre));
-				if (slopeSet.contains(pivot.slopeTo(pre))) {
+				if (slopeSet.contains(pivot.slopeTo(startPoint))) {
 					//System.out.println("--set contains--");
 					start = j;
 					continue;
 				}
 				
-				if (Double.compare(pivot.slopeTo(curent), pivot.slopeTo(pre)) != 0) {
+				if (Double.compare(pivot.slopeTo(curentPoint), pivot.slopeTo(startPoint)) != 0) {
 					//System.out.println("not equals, j-start=" + (j - start));
 					if (j - start >= 3) {
 						tempList.clear();
