@@ -62,10 +62,10 @@ public class Solver {
     
     // sequence of boards in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
-    	return new solIterable();
+    	return new SolIterable();
     }
     
-    private class solIterable implements Iterable<Board>{
+    private class SolIterable implements Iterable<Board>{
 
 		@Override
 		public Iterator<Board> iterator() {
@@ -76,12 +76,15 @@ public class Solver {
     
 	// solve a slider puzzle (given below)
     public static void main(String[] args) {
-    	Board initBoard = new Board(new int[][]{{0, 1, 3}, {4, 2, 5}, {7, 8, 6}});
+    	Board initBoard = new Board(new int[][]{{4, 1, 3}, {0, 2, 5}, {7, 8, 6}});
+    	System.out.println(initBoard.twin());
+    	/*
     	Solver s = new Solver(initBoard);
     	System.out.println("Moves=" + s.moves());
     	for (Board b : s.solution()) {
     		System.out.println(b);
     	}
+    	*/
     }
 
 }
