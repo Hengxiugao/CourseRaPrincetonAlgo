@@ -7,10 +7,21 @@ public class Board {
 	
 	private int[][] blocks;
 	private int neighborIndex = 0;
+	private int zeroCol = 0;
+	private int zeroRow = 0;
 	// construct a board from an n-by-n array of blocks
 	// (where blocks[i][j] = block in row i, column j)
 	public Board(int[][] blocks) {
-		this.blocks = blocks;
+		this.blocks = new int[blocks.length][blocks.length];
+		for (int i = 0; i < dimension(); i++) {
+			for (int j = 0 ; j < dimension(); j++) {
+				this.blocks[i][j] = blocks[i][j];
+				if (blocks[i][j] == 0) {
+					zeroRow = i;
+					zeroCol = j;
+				}
+			}
+		}
 	}
 	
 	// board dimension n
@@ -73,8 +84,7 @@ public class Board {
 	// a board that is obtained by exchanging any pair of blocks
 	public Board twin() {
 		int[][] neighborBlocks = new int[blocks.length][blocks.length];
-		int zeroCol = 0;
-		int zeroRow = 0;
+		
 		for (int i = 0; i < dimension(); i++) {
 			for (int j = 0 ; j < dimension(); j++) {
 				neighborBlocks[i][j] = blocks[i][j];
@@ -153,10 +163,10 @@ public class Board {
 	
 	// all neighboring boards
 	public Iterable<Board> neighbors() {
-		return new boardNeighboring();
+		return new BoardNeighboring();
 	}
 	
-	private class boardNeighboring implements Iterable<Board>{
+	private class BoardNeighboring implements Iterable<Board>{
 
 		@Override
 		public Iterator<Board> iterator() {
