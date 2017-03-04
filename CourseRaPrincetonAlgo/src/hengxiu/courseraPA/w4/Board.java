@@ -1,13 +1,14 @@
 package hengxiu.courseraPA.w4;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Board {
 	
 	private int[][] blocks;
-	private int zeroCol = 0;
-	private int zeroRow = 0;
+	private int hamScore = -1;
+	private int manScore = -1;
+	private boolean isGoal = false;
+	private boolean isGoalCal = false;
 	// construct a board from an n-by-n array of blocks
 	// (where blocks[i][j] = block in row i, column j)
 	public Board(int[][] blocks) {
@@ -15,13 +16,8 @@ public class Board {
 		for (int i = 0; i < dimension(); i++) {
 			for (int j = 0 ; j < dimension(); j++) {
 				this.blocks[i][j] = blocks[i][j];
-				if (blocks[i][j] == 0) {
-					zeroRow = i;
-					zeroCol = j;
-				}
 			}
 		}
-	
 	}
 	
 	// board dimension n
@@ -31,6 +27,9 @@ public class Board {
 	
 	// number of blocks out of place
 	public int hamming() {
+		if (hamScore != -1) {
+			return hamScore;
+		}
 		int result = 0;
 		for (int i = 0; i < dimension(); i++) {
 			for (int j = 0 ; j < dimension(); j++) {
@@ -42,11 +41,15 @@ public class Board {
 				}
 			}
 		}
+		hamScore = result;
 		return result;
 	}
 	
 	// sum of Manhattan distances between blocks and goal
 	public int manhattan() {
+		if (manScore != -1) {
+			return manScore;
+		}
 		int result = 0;
 		for (int i = 0; i < dimension(); i++) {
 			for (int j = 0 ; j < dimension(); j++) {
@@ -59,11 +62,15 @@ public class Board {
 				result += Math.abs(targetRow - i) + Math.abs(targetCol - j);
 			}
 		}
+		manScore = result;
 		return result;
 	}
 	
 	// is this board the goal board?
 	public boolean isGoal() {
+		if (isGoalCal) {
+			return isGoal;
+		}
 		for (int i = 0; i < dimension(); i++) {
 			for (int j = 0 ; j < dimension(); j++) {
 				if (blocks[i][j] != i * dimension() + j + 1) {
@@ -78,6 +85,8 @@ public class Board {
 				}
 			}
 		}
+		isGoal = true;
+		isGoalCal = true;
 		return true;
 	}
 	
@@ -91,7 +100,7 @@ public class Board {
 			}
 		}
 		
-		if (zeroRow == 0) {
+		if (blocks[0][0] == 0 || blocks[0][1] == 0) {
 			swap(twinBlocks, 1, 0, 1, 1);
 		} else {
 			swap(twinBlocks, 0, 0, 0, 1);
@@ -114,8 +123,15 @@ public class Board {
 			return false;
 		}
 		Board other = (Board)y;
-		if (!this.toString().equals(other.toString())) {
+		if (other.dimension() != this.dimension()) {
 			return false;
+		}
+		for (int i = 0; i < this.dimension(); i++) {
+			for (int j = 0; j < this.dimension(); j++) {
+				if (other.blocks[i][j] != this.blocks[i][j]) {
+					return false;
+				}
+			}
 		}
 		return true;
 	}
@@ -124,7 +140,8 @@ public class Board {
 	public Iterable<Board> neighbors() {
 		int[][] neighborBlocks = new int[blocks.length][blocks.length];
 		ArrayList<Board> boardList = new ArrayList<>();
-		
+		int zeroRow = 0;
+		int zeroCol = 0;
 		for (int i = 0; i < dimension(); i++) {
 			for (int j = 0 ; j < dimension(); j++) {
 				neighborBlocks[i][j] = blocks[i][j];
@@ -174,7 +191,7 @@ public class Board {
 	
 	// unit tests (not graded)
 	public static void main(String[] args) {
-		Board testBoard = new Board(new int[][]{{0, 1, 3}, {4, 2, 5}, {7, 8, 6}});
+		Board testBoard = new Board(new int[][]{{0, 2, 4}, {5, 7, 1}, {8, 3, 6}});
 		System.out.println("Board:\n"+testBoard);
 		System.out.println("Twin Board:\n"+testBoard.twin());
 		System.out.println("Neighbours:");
