@@ -10,10 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 public class Solver {
 	
-	private MinPQ<BoardNode> pq;
 	private int moves = -1;
-	private ArrayList<Board> solList;
-	private HashSet<String> visited;
+	private ArrayList<Board> solList = null;
+	private boolean isSolvable = true;
 	
 	private class BoardNode {
 		Board node;
@@ -28,54 +27,62 @@ public class Solver {
 		}
 	}
 	
+	private void solve(MinPQ<BoardNode> pq, HashSet<String> visited) {
+		BoardNode curNode = pq.delMin();
+		//System.out.println(curBoard);
+		visited.add(curNode.node.toString());
+		for (Board nextBoard : curNode.node.neighbors()) {
+			if (visited.contains(nextBoard.toString())) {
+				continue;
+			}
+			BoardNode nextNode = new BoardNode(nextBoard, curNode, curNode.move + 1);
+			curNode.subNode.add(nextNode);
+			pq.insert(nextNode);
+		}
+	}
+	
 	// find a solution to the initial board (using the A* algorithm)
 	public Solver(Board initial) {
-		solList = new ArrayList<>();
-		BoardNode curNode = new BoardNode(initial, null, 0);
-		if (isSolvable()) {
-			visited = new HashSet<>();
-			pq = new MinPQ<BoardNode>(new MinPQComparator());
-			pq.insert(curNode);
-			visited.add(initial.toString());
-			
-			boolean finished = false;
-			while (!pq.isEmpty() && !finished) {
-				int size = pq.size();
-				for (int i = 0; i < size; i++) {
-					curNode = pq.delMin();
-					//System.out.println(curBoard);
-					if (curNode.node.isGoal()) {
-						finished = true;
-						break;
-					}
-					visited.add(curNode.node.toString());
-					for (Board nextBoard : curNode.node.neighbors()) {
-						if (visited.contains(nextBoard.toString())) {
-							continue;
-						}
-						BoardNode nextNode = new BoardNode(nextBoard, curNode, curNode.move + 1);
-						curNode.subNode.add(nextNode);
-						pq.insert(nextNode);
-					}
-				}
-				
+		
+		BoardNode curNode = null;
+		MinPQ<BoardNode> pq = new MinPQ<BoardNode>(new MinPQComparator());
+		MinPQ<BoardNode> pqTwin = new MinPQ<BoardNode>(new MinPQComparator());
+		HashSet<String> visited= new HashSet<>();
+		HashSet<String> visitedTwin= new HashSet<>();
+		
+		pq.insert(new BoardNode(initial, null, 0));
+		pqTwin.insert(new BoardNode(initial.twin(), null, 0));
+		visited.add(initial.toString());
+		visitedTwin.add(initial.twin().toString());
+		
+		
+		while (!pq.isEmpty() && !pqTwin.isEmpty()) {
+			if (pq.min().node.isGoal()) {
+				curNode = pq.min();
+				break;
 			}
+			if (pqTwin.min().node.isGoal()) {
+				isSolvable = false;
+				break;
+			}
+			solve(pq, visited);
+			solve(pqTwin, visitedTwin);
+			
+		}
+		if (isSolvable()) {
+			solList = new ArrayList<>();
 			do  {
 				solList.add(curNode.node);
 				curNode = curNode.parentNode;
 				moves++;
 			} while (curNode != null);
 			Collections.reverse(solList);
-			
-		} else {
-			moves = -1;
-			solList = null;
 		}
 	}
 	
 	// is the initial board solvable?
     public boolean isSolvable() {
-    	return true;
+    	return isSolvable;
     }
     
     // min number of moves to solve initial board; -1 if unsolvable
@@ -99,13 +106,16 @@ public class Solver {
     
 	// solve a slider puzzle (given below)
     public static void main(String[] args) {
-    	Board initBoard = new Board(new int[][]{{1, 0, 2}, {7, 5, 4}, {8, 6, 3}});
+    	Board initBoard = new Board(new int[][]{{2,  3,  4,  8}, {1,  6,  0, 12}, {5, 10,  7, 11}, {9, 13, 14, 15}});
     	
     	Solver s = new Solver(initBoard);
     	System.out.println("Moves=" + s.moves());
-    	for (Board b : s.solution()) {
-    		System.out.println(b);
+    	if (s.isSolvable()) {
+    		for (Board b : s.solution()) {
+        		System.out.println(b);
+        	}
     	}
+    	
     	
     }
 
