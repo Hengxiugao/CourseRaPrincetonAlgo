@@ -8,14 +8,9 @@ public class Board {
 	private int[][] blocks;
 	private int zeroCol = 0;
 	private int zeroRow = 0;
-	private int move;
 	// construct a board from an n-by-n array of blocks
 	// (where blocks[i][j] = block in row i, column j)
 	public Board(int[][] blocks) {
-		this(blocks, 0);
-	}
-	
-	private Board(int[][] blocks, int move) {
 		this.blocks = new int[blocks.length][blocks.length];
 		for (int i = 0; i < dimension(); i++) {
 			for (int j = 0 ; j < dimension(); j++) {
@@ -26,7 +21,7 @@ public class Board {
 				}
 			}
 		}
-		this.move = move;
+	
 	}
 	
 	// board dimension n
@@ -64,7 +59,7 @@ public class Board {
 				result += Math.abs(targetRow - i) + Math.abs(targetCol - j);
 			}
 		}
-		return result + move;
+		return result;
 	}
 	
 	// is this board the goal board?
@@ -142,30 +137,27 @@ public class Board {
 		
 		if (zeroRow >= 1) {
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow - 1, zeroCol);
-			boardList.add(new Board(neighborBlocks, move + 1));
+			boardList.add(new Board(neighborBlocks));
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow - 1, zeroCol);
 		}
 		if (zeroRow < dimension() - 1) {
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow + 1, zeroCol);
-			boardList.add(new Board(neighborBlocks, move + 1));
+			boardList.add(new Board(neighborBlocks));
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow + 1, zeroCol);
 		}
 		if (zeroCol >= 1) {
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow, zeroCol - 1);
-			boardList.add(new Board(neighborBlocks, move + 1));
+			boardList.add(new Board(neighborBlocks));
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow, zeroCol - 1);
 		}
 		if (zeroCol < dimension() - 1) {
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow, zeroCol + 1);
-			boardList.add(new Board(neighborBlocks, move + 1));
+			boardList.add(new Board(neighborBlocks));
 			swap(neighborBlocks, zeroRow, zeroCol, zeroRow, zeroCol + 1);
 		}
 		
 		return boardList;
 	}
-	
-	
-
 	
 	// string representation of this board (in the output format specified below)
 	public String toString() {
