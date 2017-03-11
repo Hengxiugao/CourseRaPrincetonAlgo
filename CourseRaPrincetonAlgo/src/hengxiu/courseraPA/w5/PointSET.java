@@ -22,6 +22,7 @@ public class PointSET {
 	// add the point to the set (if it is not already in the set)
 	public void insert(Point2D p) {
 		
+		
 	}   
 	
 	// does the set contain point p? 
