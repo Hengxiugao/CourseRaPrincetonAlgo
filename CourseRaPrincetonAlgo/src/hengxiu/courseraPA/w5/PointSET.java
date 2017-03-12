@@ -27,24 +27,24 @@ public class PointSET {
 	public void insert(Point2D p) {
 		pointSet.add(p);
 		
-	}   
+	}
 	
 	// does the set contain point p? 
 	public boolean contains(Point2D p) {
 		return pointSet.contains(p);
-	}   
+	}
 	
 	// draw all points to standard draw
 	public void draw() {
 		for (Point2D p : pointSet) {
 			p.draw();
 		}
-	}                 
+	}
 	
 	// all points that are inside the rectangle 
 	public Iterable<Point2D> range(RectHV rect) {
 		
-	}   
+	}
 	
 	// a nearest neighbor in the set to point p; null if the set is empty 
 	public Point2D nearest(Point2D p) {
@@ -54,5 +54,5 @@ public class PointSET {
 	// unit testing of the methods (optional) 
 	public static void main(String[] args) {
 		
-	}    
+	}
 }
