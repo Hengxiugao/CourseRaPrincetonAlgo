@@ -4,6 +4,18 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 
 public class KdTree {
+	
+	private class KdNode {
+		int level;
+		Point2D point;
+		KdNode left;
+		KdNode right;
+		KdNode (int level, Point2D point) {
+			this.level = level;
+			this.point = point;
+		}
+	}
+	
 	// construct an empty set of points 
 	public KdTree() {
 		
