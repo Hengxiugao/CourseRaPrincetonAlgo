@@ -6,6 +6,7 @@ import edu.princeton.cs.algs4.RectHV;
 public class KdTree {
 	
 	private class KdNode {
+		//Odd level : vertical, even level : horizontal
 		int level;
 		Point2D point;
 		KdNode left;
