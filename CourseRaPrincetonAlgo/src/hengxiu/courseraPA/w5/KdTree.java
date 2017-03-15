@@ -151,6 +151,25 @@ public class KdTree {
 		}
 	}
 	
+	private List<Point2D> rangeHelper(KdNode root, RectHV rect) {
+		if (root == null) {
+			return new ArrayList<Point2D>();
+		}
+		List<Point2D> resultList = new ArrayList<>();
+		if (Double.compare(rect.distanceSquaredTo(root.point), 0.0) == 0) {
+			resultList.addAll(rangeHelper(root.left, rect));
+			resultList.addAll(rangeHelper(root.right, rect));
+		} else {
+			
+			if (root.level % 2 == 0) {
+			//Vertical level, compare x
+				
+			} else {
+			//Horizontal level, compare y
+			}
+		}
+	}
+	
 	// a nearest neighbor in the set to point p; null if the set is empty 
 	public Point2D nearest(Point2D p) {
 		if (p == null) {
