@@ -98,6 +98,38 @@ public class KdTree {
 		if (p == null) {
 			throw new java.lang.NullPointerException();
 		}
+		return containsHelper(root, p);
+	}
+	
+	private boolean containsHelper(KdNode root, Point2D p) {
+		if (root == null) {
+			return false;
+		}
+		if (root.point.equals(p)) {
+			return true;
+		}
+		//Vertical level, compare x
+		if (root.level % 2 == 0) {
+			//target point is on the left of the root point
+			if (p.x() < root.point.x()) {
+				return containsHelper(root.left, p);
+			} else {
+			//target point is on the right of the root point
+				return containsHelper(root.right, p);
+			}
+		} else {
+		//Horizontal level, compare y
+
+			//target point is on the down of the root point
+			if (p.y() < root.point.y()) {
+				return containsHelper(root.left, p);
+			} else {
+			//target point is on the up of the root point
+				return containsHelper(root.right, p);
+			}
+		
+		}
+
 	}
 
 	
