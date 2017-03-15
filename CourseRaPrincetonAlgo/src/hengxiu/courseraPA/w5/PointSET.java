@@ -56,7 +56,7 @@ public class PointSET {
 		}
 		List<Point2D> resultList = new ArrayList<>();
 		for (Point2D p : pointSet) {
-			if (rect.distanceSquaredTo(p) == 0) {
+			if (Double.compare(rect.distanceSquaredTo(p), 0.0) == 0) {
 				resultList.add(p);
 			}
 		}
