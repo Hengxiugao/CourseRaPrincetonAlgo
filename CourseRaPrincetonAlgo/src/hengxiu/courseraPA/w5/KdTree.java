@@ -192,21 +192,40 @@ public class KdTree {
 		if (p == null) {
 			throw new java.lang.NullPointerException();
 		}
+		nearestResult result = new nearestResult(root.point);
+		nearestHelper(root, p, result);
+		return result.pn;
 	}
 	
-	private void nearestHelper(KdNode root, Point2D pn) {
+	private class nearestResult{
+		Point2D pn;
+		nearestResult(Point2D p){
+			pn = new Point2D(p.x(), p.y());
+		}
+	}
+	
+	private void nearestHelper(KdNode root, Point2D p, nearestResult result) {
 		if (root == null) {
 			return;
 		}
+		if (p.distanceTo(root.point) < p.distanceTo(result.pn)) {
+			result.pn = root.point;
+		}
 		if (root.level % 2 == 0) {
+		//Vertical level, compare x
 			if (p.x() < root.point.x()) {
-				
+				nearestHelper(root.left, p, result);
+			} else {
+				nearestHelper(root.right, p, result);
 			}
 		} else {
-			
+		//Horizontal level, compare y
+			if (p.y() < root.point.y()) {
+				nearestHelper(root.left, p, result);
+			} else {
+				nearestHelper(root.right, p, result);
+			}
 		}
-		Point2D leftNearest = nearestHelper(root.left, p);
-		Point2D rightNearest = nearestHelper(root.right, p);
 		
 	}
 	
