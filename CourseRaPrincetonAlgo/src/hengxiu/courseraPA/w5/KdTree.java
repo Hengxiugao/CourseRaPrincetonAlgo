@@ -149,25 +149,42 @@ public class KdTree {
 		if (rect == null) {
 			throw new java.lang.NullPointerException();
 		}
+		return rangeHelper(root, rect);
 	}
 	
 	private List<Point2D> rangeHelper(KdNode root, RectHV rect) {
-		if (root == null) {
-			return new ArrayList<Point2D>();
-		}
 		List<Point2D> resultList = new ArrayList<>();
+		if (root == null) {
+			return resultList;
+		}
+		
 		if (Double.compare(rect.distanceSquaredTo(root.point), 0.0) == 0) {
 			resultList.addAll(rangeHelper(root.left, rect));
 			resultList.addAll(rangeHelper(root.right, rect));
 		} else {
-			
 			if (root.level % 2 == 0) {
 			//Vertical level, compare x
-				
+				if (root.point.x() < rect.xmin()) {
+					resultList.addAll(rangeHelper(root.right, rect));
+				} else if (root.point.x() > rect.xmax()) {
+					resultList.addAll(rangeHelper(root.left, rect));
+				} else {
+					resultList.addAll(rangeHelper(root.left, rect));
+					resultList.addAll(rangeHelper(root.right, rect));
+				}
 			} else {
 			//Horizontal level, compare y
+				if (root.point.y() < rect.ymin()) {
+					resultList.addAll(rangeHelper(root.right, rect));
+				} else if (root.point.y() > rect.ymax()) {
+					resultList.addAll(rangeHelper(root.left, rect));
+				} else {
+					resultList.addAll(rangeHelper(root.left, rect));
+					resultList.addAll(rangeHelper(root.right, rect));
+				}
 			}
 		}
+		return resultList;
 	}
 	
 	// a nearest neighbor in the set to point p; null if the set is empty 
@@ -175,6 +192,22 @@ public class KdTree {
 		if (p == null) {
 			throw new java.lang.NullPointerException();
 		}
+	}
+	
+	private void nearestHelper(KdNode root, Point2D pn) {
+		if (root == null) {
+			return;
+		}
+		if (root.level % 2 == 0) {
+			if (p.x() < root.point.x()) {
+				
+			}
+		} else {
+			
+		}
+		Point2D leftNearest = nearestHelper(root.left, p);
+		Point2D rightNearest = nearestHelper(root.right, p);
+		
 	}
 	
 	// unit testing of the methods (optional) 
