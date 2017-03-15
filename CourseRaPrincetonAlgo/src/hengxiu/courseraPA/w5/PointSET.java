@@ -10,7 +10,7 @@ import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class PointSET {
-	TreeSet<Point2D> pointSet;
+	private TreeSet<Point2D> pointSet;
 	
 	// construct an empty set of points 
 	public PointSET() {
@@ -93,6 +93,7 @@ public class PointSET {
 			Point2D p = new Point2D(x, y);
 			pset.insert(p);
 		}
+		System.out.println("pSet, size=" + pset.size());
 		StdDraw.setPenRadius(0.01);
 		
 		pset.draw();

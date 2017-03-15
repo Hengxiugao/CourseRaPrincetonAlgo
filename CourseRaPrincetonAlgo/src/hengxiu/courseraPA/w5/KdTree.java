@@ -1,7 +1,9 @@
 package hengxiu.courseraPA.w5;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
@@ -9,8 +11,8 @@ import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree {
-	KdNode root;
-	int size;
+	private KdNode root;
+	private int size;
 	private class KdNode {
 		//Odd level : horizontal, even level : vertical
 		int level;
@@ -36,7 +38,7 @@ public class KdTree {
 	
 	// number of points in the set 
 	public int size() {
-		return size();
+		return size;
 	}
 	
 	// add the point to the set (if it is not already in the set)
@@ -44,12 +46,15 @@ public class KdTree {
 		if (p == null) {
 			throw new java.lang.NullPointerException();
 		}
+		if (this.contains(p)) {
+			return;
+		}
 		if (isEmpty()) {
 			root = new KdNode(0, p);
 		} else {
 			insertTo(root, p);
 		}
-		
+		size++;
 	}
 	
 	private void insertTo(KdNode root, Point2D p) {
@@ -154,8 +159,8 @@ public class KdTree {
 		return rangeHelper(root, rect);
 	}
 	
-	private List<Point2D> rangeHelper(KdNode root, RectHV rect) {
-		List<Point2D> resultList = new ArrayList<>();
+	private Set<Point2D> rangeHelper(KdNode root, RectHV rect) {
+		Set<Point2D> resultList = new HashSet<>();
 		if (root == null) {
 			return resultList;
 		}
@@ -242,26 +247,28 @@ public class KdTree {
 			Point2D p = new Point2D(x, y);
 			pset.insert(p);
 		}
+		pset.insert(new Point2D(0.41151, 0.6698));
+		System.out.println("KdTree, size=" + pset.size());
 		StdDraw.setPenRadius(0.01);
 		
 		pset.draw();
 		
-		
+		/*
 		StdDraw.setPenColor(StdDraw.RED);
 		Point2D p = new Point2D(0.5, 0.1);
 		p.draw();
 		
 		StdDraw.setPenColor(StdDraw.GREEN);
 		pset.nearest(p).draw();
+		*/
 		
-		/*
-		RectHV rect = new RectHV(0, 0, 0.5, 0.904508);
+		RectHV rect = new RectHV(0.26351, 0.51093, 0.6215, 0.66999);
 		rect.draw();
 		StdDraw.setPenColor(StdDraw.RED);
-		Iterable<Point2D> pointList = pset.range(rect);
-		for (Point2D p : pointList) {
+		Iterable<Point2D> pointSet = pset.range(rect);
+		for (Point2D p : pointSet) {
 			p.draw();
 		}
-		*/
+		
 	}    
 }
