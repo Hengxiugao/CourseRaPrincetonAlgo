@@ -72,7 +72,7 @@ public class KdTree {
 				insertTo(root.left, p);
 			} else {
 			//target point is on the right of the root point
-				if (root.right == null) {
+				if (root.right == null) {    
 					root.right = new KdNode(root.level + 1, p);
 					return;
 				}
