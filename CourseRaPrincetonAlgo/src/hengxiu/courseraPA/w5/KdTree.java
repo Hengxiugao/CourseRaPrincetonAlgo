@@ -65,7 +65,7 @@ public class KdTree {
 		if (root.level % 2 == 0) {
 			//target point is on the left of the root point
 			if (p.x() < root.point.x()) {
-				if (root.left == null) {
+				if (root.left == null) { 
 					root.left = new KdNode(root.level + 1, p);
 					return;
 				}
